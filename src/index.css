@@ -1,0 +1,556 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  display: none;
+}
+
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+body {
+  @apply antialiased overflow-hidden;
+  background: #fdfbf9;
+  min-height: 100vh;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", sans-serif;
+}
+
+/* ========== SWIPE DECK STYLES ========== */
+
+.swipe-deck {
+  @apply relative flex flex-col h-screen w-full overflow-hidden;
+  max-width: 28rem;
+  margin: 0 auto;
+  background: #fdfbf9;
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.1);
+}
+
+/* Ambient Background Gradient */
+.ambient-gradient {
+  @apply absolute top-0 left-0 w-full pointer-events-none;
+  height: 60%;
+  background: linear-gradient(to bottom, rgba(249, 116, 21, 0.05), transparent);
+  z-index: 0;
+}
+
+/* ========== TOP HEADER ========== */
+
+.top-header {
+  @apply flex items-center justify-between px-6 pt-12 pb-2 absolute top-0 w-full;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.9),
+    rgba(255, 255, 255, 0.5),
+    transparent
+  );
+  z-index: 30;
+}
+
+.header-left {
+  @apply flex items-center gap-3;
+}
+
+.user-avatar-container {
+  @apply relative;
+}
+
+.user-avatar {
+  @apply size-10 rounded-full bg-gradient-to-br from-orange-400 to-pink-500 border-2 border-white shadow-sm flex items-center justify-center;
+}
+
+.avatar-icon {
+  @apply text-white;
+}
+
+.online-indicator {
+  @apply absolute bottom-0 right-0 size-3 bg-green-500 border-2 border-white rounded-full;
+}
+
+.filter-button {
+  @apply flex items-center justify-center size-10 rounded-full bg-white/50 backdrop-blur-md border border-white/60 shadow-sm text-gray-700 hover:bg-white transition-colors;
+}
+
+/* ========== CARD AREA ========== */
+
+.card-area {
+  @apply flex-grow relative w-full px-3 pt-28 pb-32 flex flex-col items-center justify-center;
+  z-index: 10;
+  perspective: 1000px;
+}
+
+/* Background Stack Effect */
+.card-stack-bg {
+  @apply absolute w-[90%] h-[80%] bg-white rounded-[2.5rem] shadow-lg border border-gray-100 pointer-events-none;
+  top: 7rem;
+  transform: scale(0.95);
+  opacity: 0.6;
+  z-index: 0;
+}
+
+/* ========== RESTAURANT CARD ========== */
+
+.restaurant-card {
+  @apply relative w-full h-full rounded-[2.5rem] shadow-2xl overflow-hidden border border-white/40 select-none cursor-grab active:cursor-grabbing;
+  transition: transform 0.3s ease;
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
+}
+
+.restaurant-card:hover {
+  transform: scale(1.01);
+}
+
+/* Card Image Container */
+.restaurant-image-container {
+  @apply absolute inset-0;
+}
+
+.restaurant-image {
+  @apply w-full h-full object-cover;
+}
+
+/* Gradient Overlay for Image */
+.card-gradient-overlay {
+  @apply absolute inset-0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.1),
+    transparent 40%,
+    rgba(0, 0, 0, 0.6)
+  );
+}
+
+/* Distance Badge (Top Left) */
+.distance-badge {
+  @apply absolute top-4 left-4 px-3 py-1.5 rounded-full flex items-center gap-1 shadow-sm;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  z-index: 10;
+}
+
+.distance-icon {
+  @apply text-orange-500;
+}
+
+.distance-text {
+  @apply text-xs font-bold text-gray-800 tracking-wide;
+}
+
+/* Trending Badge (Top Right) */
+.trending-badge {
+  @apply absolute top-4 right-4 px-3 py-1.5 rounded-full flex items-center gap-1 shadow-sm text-white;
+  background: rgba(249, 116, 21, 0.9);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(249, 116, 21, 0.5);
+  z-index: 10;
+}
+
+.trending-text {
+  @apply text-xs font-bold tracking-wide;
+}
+
+/* Glass Info Overlay (Bottom) */
+.restaurant-info-glass {
+  @apply absolute bottom-4 left-3 right-3 p-4 rounded-xl flex flex-col gap-3;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+  z-index: 10;
+}
+
+.info-header {
+  @apply flex justify-between items-start;
+}
+
+.info-left {
+  @apply flex flex-col;
+}
+
+.restaurant-name {
+  @apply text-2xl font-black text-gray-900 leading-tight tracking-tight;
+}
+
+.restaurant-cuisine {
+  @apply text-gray-600 text-sm font-medium mt-0.5;
+}
+
+.info-right {
+  @apply flex flex-col items-end gap-1;
+}
+
+.rating-container {
+  @apply flex items-center gap-1 px-2 py-1 rounded-lg border;
+  background: rgba(255, 255, 255, 0.5);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.star-icon {
+  @apply text-orange-500;
+}
+
+.rating-value {
+  @apply text-sm font-bold text-gray-900;
+}
+
+.reviews-count {
+  @apply text-[10px] text-gray-500 font-medium;
+}
+
+/* Tags/Chips */
+.restaurant-tags {
+  @apply flex flex-wrap gap-2;
+}
+
+.tag-chip {
+  @apply px-2.5 py-1 rounded-lg text-[11px] font-semibold text-gray-700;
+  background: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/* ========== REACTION BUTTONS ========== */
+
+.reaction-buttons {
+  @apply flex items-center justify-center gap-6 px-6 pb-2 w-full max-w-[340px] mx-auto;
+  z-index: 20;
+}
+
+.reaction-btn {
+  @apply flex items-center justify-center rounded-full border transition-all;
+  box-shadow: 0 8px 20px -6px rgba(0, 0, 0, 0.1);
+}
+
+.reaction-btn:active {
+  transform: scale(0.95);
+}
+
+/* Pass Button */
+.pass-btn {
+  @apply size-14 bg-white border-gray-100 text-gray-400;
+}
+
+.pass-btn:hover {
+  @apply bg-gray-50 text-red-500;
+}
+
+/* Super Like Button (Elevated) */
+.super-like-btn {
+  @apply size-12 bg-white border-gray-100 text-blue-400;
+  margin-top: -2rem;
+}
+
+.super-like-btn:hover {
+  @apply bg-gray-50 text-blue-500;
+}
+
+/* Like Button (Primary) */
+.like-btn {
+  @apply size-16 bg-gradient-to-br from-orange-500 to-orange-400 border-0 text-white;
+  box-shadow: 0 12px 25px -8px rgba(249, 116, 21, 0.5);
+}
+
+.like-btn:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 12px 30px -8px rgba(249, 116, 21, 0.6);
+}
+
+/* ========== BOTTOM NAVIGATION ========== */
+
+.bottom-nav {
+  @apply sticky bottom-0 w-full px-6 pt-3 pb-8 flex justify-between items-center;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  z-index: 40;
+}
+
+.nav-link {
+  @apply flex flex-col items-center gap-1 transition-colors;
+}
+
+.nav-link.active {
+  @apply text-orange-500;
+}
+
+.nav-link:not(.active) {
+  @apply text-gray-400;
+}
+
+.nav-link:not(.active):hover {
+  @apply text-gray-600;
+}
+
+.nav-icon {
+  @apply p-1 transition-transform;
+}
+
+.nav-link:hover .nav-icon {
+  transform: scale(1.1);
+}
+
+.active-indicator {
+  @apply absolute -top-0 right-0 size-2 bg-red-500 rounded-full border-2 border-white;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.badge-count {
+  @apply absolute top-0 right-0 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[9px] font-bold text-white ring-2 ring-white;
+}
+
+/* ========== ANIMATIONS ========== */
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ========== SPLASH SCREEN ========== */
+
+.splash-screen {
+  @apply flex flex-col items-center justify-center h-screen w-full;
+  background: linear-gradient(135deg, #6366f1 0%, #f97316 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.splash-content {
+  @apply flex flex-col items-center gap-8 z-10;
+}
+
+.splash-icon {
+  @apply text-7xl;
+  animation: float 3s ease-in-out infinite;
+}
+
+.splash-title {
+  @apply text-5xl font-black text-white tracking-tight text-center;
+}
+
+.splash-subtitle {
+  @apply text-xl font-medium text-white/90 text-center;
+}
+
+.splash-loader {
+  @apply mt-8 w-64 h-2 rounded-full overflow-hidden;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(16px);
+}
+
+.splash-loader-bar {
+  @apply h-full bg-white rounded-full;
+  animation: load 2s ease-in-out;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes load {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+/* ========== LOGIN SCREEN ========== */
+
+.login-screen {
+  @apply flex flex-col items-center justify-center h-screen w-full px-8;
+  background: linear-gradient(135deg, #6366f1 0%, #f97316 100%);
+}
+
+.login-content {
+  @apply flex flex-col items-center gap-8 z-10;
+}
+
+.login-icon {
+  @apply text-7xl;
+}
+
+.login-title {
+  @apply text-5xl font-black text-white tracking-tight text-center;
+}
+
+.login-subtitle {
+  @apply text-xl font-medium text-white/90 text-center;
+}
+
+.login-button {
+  @apply mt-8 flex items-center gap-3 px-8 py-4 rounded-full font-bold text-lg transition-all;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+}
+
+.login-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.3);
+}
+
+.login-button:active {
+  transform: translateY(0);
+}
+
+/* ========== MATCH SCREEN ========== */
+
+.match-screen {
+  @apply absolute top-0 left-0 flex flex-col items-center justify-center h-full w-full overflow-hidden px-6;
+  z-index: 60; /* Maior que bottom-nav (40) e header (30) */
+  background: linear-gradient(135deg, #a78bfa 0%, #c4b5fd 100%);
+}
+
+.match-gradient-bg {
+  @apply absolute inset-0 pointer-events-none;
+  background: radial-gradient(
+    circle at 50% 20%,
+    rgba(249, 116, 21, 0.15),
+    transparent 60%
+  );
+  z-index: 0;
+}
+
+.match-content {
+  @apply relative z-10 flex flex-col items-center w-full;
+}
+
+/* Animated Heart Circle */
+.match-heart-circle {
+  @apply flex items-center justify-center mb-8;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
+  box-shadow: 0 20px 60px -10px rgba(249, 116, 21, 0.4),
+    0 0 0 20px rgba(249, 116, 21, 0.1), 0 0 0 40px rgba(249, 116, 21, 0.05);
+}
+
+/* Title */
+.match-title {
+  @apply text-6xl font-black text-gray-900 text-center leading-tight mb-4;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Subtitle */
+.match-subtitle {
+  @apply text-lg font-medium text-gray-700 text-center mb-8 px-4;
+  max-width: 320px;
+}
+
+/* Restaurant Card */
+.match-restaurant-card {
+  @apply w-full rounded-2xl p-4 flex gap-4 items-center mb-6;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+}
+
+.match-card-image {
+  @apply flex-shrink-0 w-24 h-24 rounded-xl overflow-hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.match-food-image {
+  @apply w-full h-full object-cover;
+}
+
+.match-card-info {
+  @apply flex-1 flex flex-col gap-1;
+}
+
+.match-restaurant-name {
+  @apply text-xl font-black text-gray-900;
+}
+
+.match-restaurant-meta {
+  @apply flex items-center gap-2 text-sm;
+}
+
+.match-rating {
+  @apply flex items-center gap-1 font-bold text-gray-900;
+}
+
+.match-meta-dot {
+  @apply text-gray-400;
+}
+
+.match-distance {
+  @apply font-semibold text-blue-600;
+}
+
+.match-suggested-dish {
+  @apply text-sm text-gray-600 mt-1;
+}
+
+.match-suggested-dish strong {
+  @apply text-orange-500 font-bold;
+}
+
+/* WhatsApp Button */
+.match-whatsapp-btn {
+  @apply w-full py-4 px-6 rounded-2xl font-bold text-lg text-white flex items-center justify-center gap-3 mb-4;
+  background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
+  box-shadow: 0 12px 30px -8px rgba(249, 116, 21, 0.5);
+  transition: all 0.2s ease;
+}
+
+.match-whatsapp-btn:hover {
+  box-shadow: 0 16px 40px -8px rgba(249, 116, 21, 0.6);
+  filter: brightness(1.05);
+}
+
+.match-whatsapp-btn:active {
+  transform: translateY(2px);
+}
+
+/* Action Buttons */
+.match-action-buttons {
+  @apply w-full flex gap-3;
+}
+
+.match-action-btn {
+  @apply flex-1 py-3 px-4 rounded-xl flex flex-col items-center gap-2 text-gray-700 font-semibold text-xs transition-all;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+.match-action-btn:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.match-action-btn:active {
+  transform: translateY(0);
+}
