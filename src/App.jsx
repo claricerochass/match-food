@@ -1,29 +1,34 @@
 import React, { useState, useEffect } from "react";
+import { AnimatePresence } from "framer-motion";
 import SplashScreen from "./components/SplashScreen";
-import LoginScreen from "./components/LoginScreen";
 import SwipeDeck from "./components/SwipeDeck";
+import { PreferencesProvider } from "./contexts/PreferencesContext";
 
-const App = () => {
-  const [currentScreen, setCurrentScreen] = useState("splash");
+function App() {
+  const [showSplash, setShowSplash] = useState(true);
 
   useEffect(() => {
-    if (currentScreen === "splash") {
-      const timer = setTimeout(() => {
-        setCurrentScreen("login");
-      }, 3000); // 3 seconds splash
-      return () => clearTimeout(timer);
-    }
-  }, [currentScreen]);
+    // Simular tempo de carregamento inicial
+    const timer = setTimeout(() => {
+      setShowSplash(false);
+    }, 2500);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
-    <div className="h-screen w-full flex flex-col items-center justify-center overflow-hidden">
-      {currentScreen === "splash" && <SplashScreen />}
-      {currentScreen === "login" && (
-        <LoginScreen onLogin={() => setCurrentScreen("swipe")} />
-      )}
-      {currentScreen === "swipe" && <SwipeDeck />}
-    </div>
+    <PreferencesProvider>
+      <div className="app-container">
+        <AnimatePresence mode="wait">
+          {showSplash ? (
+            <SplashScreen key="splash" />
+          ) : (
+            <SwipeDeck key="deck" />
+          )}
+        </AnimatePresence>
+      </div>
+    </PreferencesProvider>
   );
-};
+}
 
 export default App;

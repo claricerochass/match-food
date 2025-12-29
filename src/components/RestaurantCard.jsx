@@ -1,9 +1,42 @@
 import React from "react";
+import { motion, useMotionValue, useTransform } from "framer-motion";
 import { Star, MapPin, TrendingUp } from "lucide-react";
 
-function RestaurantCard({ restaurant }) {
+function RestaurantCard({ restaurant, onSwipe, isTop }) {
+  const x = useMotionValue(0);
+  const rotate = useTransform(x, [-200, 200], [-25, 25]);
+  const opacity = useTransform(x, [-200, -150, 0, 150, 200], [0, 1, 1, 1, 0]);
+
+  const handleDragEnd = (event, info) => {
+    if (info.offset.x > 100) {
+      onSwipe("right", restaurant);
+    } else if (info.offset.x < -100) {
+      onSwipe("left", restaurant);
+    }
+  };
+
   return (
-    <div className="restaurant-card">
+    <motion.div
+      className="restaurant-card"
+      style={{
+        x,
+        rotate,
+        opacity,
+        zIndex: isTop ? 10 : 0,
+      }}
+      initial={{ scale: 0.9, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      exit={{
+        x: x.get() === 0 ? 0 : x.get() > 0 ? 500 : -500,
+        opacity: 0,
+        scale: 0.5,
+      }}
+      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      drag={isTop ? "x" : false}
+      dragConstraints={{ left: 0, right: 0 }}
+      onDragEnd={handleDragEnd}
+      whileTap={{ scale: 0.98 }}
+    >
       {/* Card Image */}
       <div className="restaurant-image-container">
         <img
@@ -52,7 +85,7 @@ function RestaurantCard({ restaurant }) {
           ))}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
