@@ -84,6 +84,10 @@ const MOCK_RESTAURANTS = [
  * Inicializa o serviço do Google Places.
  * Retorna 'mock' se a API Key não estiver presente, sinalizando uso de dados falsos.
  */
+/**
+ * Inicializa o serviço do Google Places.
+ * Retorna 'mock' se a API Key não estiver presente, sinalizando uso de dados falsos.
+ */
 export const initPlacesService = async (mapDiv) => {
   if (!API_KEY) {
     console.warn("Google Maps API Key não fornecida. Usando modo MOCK.");
@@ -92,16 +96,9 @@ export const initPlacesService = async (mapDiv) => {
 
   try {
     const google = await loader.load();
-    const { Map } = await google.maps.importLibrary("maps");
-    const { PlacesService } = await google.maps.importLibrary("places");
-
-    mapInstance = new Map(mapDiv, {
-      center: { lat: 0, lng: 0 },
-      zoom: 15,
-    });
-
-    placesService = new PlacesService(mapInstance);
-    return placesService;
+    // A nova API precisa apenas carregar a lib 'places'.
+    await google.maps.importLibrary("places");
+    return "ready";
   } catch (error) {
     console.error(
       "Erro ao inicializar Google Places, caindo para mock:",
@@ -112,53 +109,77 @@ export const initPlacesService = async (mapDiv) => {
 };
 
 /**
- * Busca restaurantes próximos.
- * Se placesService não estiver disponível (ou for string "mock"), retorna dados mockados.
+ * Busca restaurantes próximos usando a nova Places API (Place.searchNearby).
  */
-export const searchRestaurants = (location, radiusInKm) => {
-  return new Promise((resolve, reject) => {
-    // Se o serviço não foi inicializado corretamente ou estamos em modo mock
-    if (!placesService || placesService === "mock" || !API_KEY) {
-      console.log("Retornando dados mockados para desenvolvimento...");
-      // Simular delay de rede
-      setTimeout(() => {
-        resolve(MOCK_RESTAURANTS);
-      }, 800);
-      return;
-    }
+export const searchRestaurants = async (location, radiusInKm) => {
+  // Se API Key não existe ou init falhou
+  if (!API_KEY) {
+    console.log("Retornando dados mockados (sem chave)...");
+    return new Promise((resolve) => {
+      setTimeout(() => resolve(MOCK_RESTAURANTS), 800);
+    });
+  }
 
+  try {
+    const { Place, SearchNearbyRankPreference } =
+      await google.maps.importLibrary("places");
+
+    // Config da requisição para nova API
     const request = {
-      location: new google.maps.LatLng(location.lat, location.lng),
-      radius: radiusInKm * 1000,
-      type: ["restaurant", "food", "cafe"],
-      rankBy: google.maps.places.RankBy.PROMINENCE,
+      fields: [
+        "id",
+        "displayName",
+        "types",
+        "photos",
+        "rating",
+        "userRatingCount",
+        "priceLevel",
+        "location",
+      ],
+      locationRestriction: {
+        center: { lat: location.lat, lng: location.lng },
+        radius: radiusInKm * 1000,
+      },
+      includedPrimaryTypes: ["restaurant", "cafe", "bar"],
+      maxResultCount: 20,
+      rankPreference: SearchNearbyRankPreference.POPULARITY,
+      language: "pt-BR",
     };
 
-    placesService.nearbySearch(request, (results, status) => {
-      if (status === google.maps.places.PlacesServiceStatus.OK && results) {
-        const mappedResults = results.map((place) => ({
-          id: place.place_id,
-          name: place.name,
-          cuisine: place.types ? formatCuisines(place.types) : "Variada",
-          image: getPhotoUrl(place),
-          rating: place.rating || 0,
-          user_ratings_total: place.user_ratings_total,
-          distance: "0 km",
-          tags: place.types ? place.types.slice(0, 3) : [],
-          price_level: place.price_level,
-          location: place.geometry.location,
-        }));
-        resolve(mappedResults);
-      } else {
-        if (status === google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
-          resolve([]);
-        } else {
-          console.warn("Places api falhou, usando mock. Status:", status);
-          resolve(MOCK_RESTAURANTS); // Fallback silencioso para mock tb em erro
-        }
-      }
-    });
-  });
+    const { places } = await Place.searchNearby(request);
+
+    if (!places || places.length === 0) {
+      return [];
+    }
+
+    // Mapeamento dos resultados da nova API para o formato do app
+    const mappedResults = places.map((place) => ({
+      id: place.id,
+      name: place.displayName,
+      cuisine: place.types ? formatCuisines(place.types) : "Variada",
+      image: getPhotoUrlNewApi(place),
+      rating: place.rating || 0,
+      user_ratings_total: place.userRatingCount || 0,
+      distance: "0 km", // A nova API não retorna distância direta na busca
+      tags: place.types ? place.types.slice(0, 3) : [],
+      price_level: place.priceLevel,
+      location: place.location,
+    }));
+
+    return mappedResults;
+  } catch (error) {
+    console.error("Erro na busca da nova API Places:", error);
+    // Fallback silencioso para mock
+    return MOCK_RESTAURANTS;
+  }
+};
+
+// Utils para nova API
+const getPhotoUrlNewApi = (place) => {
+  if (place.photos && place.photos.length > 0) {
+    return place.photos[0].getURI({ maxWidth: 800 });
+  }
+  return "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80";
 };
 
 // Utils

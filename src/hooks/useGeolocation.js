@@ -21,9 +21,22 @@ export function useGeolocation() {
         setLoading(false);
       },
       (err) => {
-        setError("Permissão de localização negada ou erro ao obter posição");
+        // Fallback em caso de erro (ex: permissão negada)
+        // Av. Ipiranga, 6681 - Partenon, Porto Alegre - RS (PUCRS)
+        const fallbackLocation = {
+          lat: -30.0602364,
+          lng: -51.1742839,
+        };
+
+        console.warn(
+          "Usando localização de fallback (PUCRS) devido a erro de geolocalização:",
+          err.message
+        );
+
+        setLocation(fallbackLocation);
+        // Não definimos erro aqui para permitir que a app continue funcionando com o fallback
+        setError(null);
         setLoading(false);
-        console.error("Geolocation error:", err);
       },
       {
         enableHighAccuracy: true,

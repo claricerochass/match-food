@@ -1,0 +1,256 @@
+/* ========== ONBOARDING STYLES ========== */
+
+.onboarding-container {
+  @apply relative flex flex-col h-screen w-full overflow-hidden;
+  max-width: 28rem;
+  margin: 0 auto;
+}
+
+.onboarding-gradient {
+  @apply absolute inset-0 pointer-events-none;
+  background: linear-gradient(
+    180deg,
+    #6366f1 0%,
+    #8b5cf6 40%,
+    #ec4899 70%,
+    #f97316 100%
+  );
+  z-index: 0;
+}
+
+.onboarding-content {
+  @apply relative z-10 flex flex-col h-full px-8 pt-16 pb-12;
+}
+
+/* Skip Button */
+.onboarding-skip {
+  @apply absolute top-8 right-8 text-white/70 font-semibold text-sm px-4 py-2 rounded-full transition-all;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.onboarding-skip:hover {
+  @apply text-white;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Visual Container */
+.onboarding-visual {
+  @apply flex-1 flex items-center justify-center mb-8;
+}
+
+/* Card Demo (Screen 1) */
+.onboarding-card-demo {
+  @apply w-full max-w-xs;
+}
+
+.demo-card {
+  @apply relative w-full rounded-3xl overflow-hidden;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.demo-card-image {
+  @apply w-full h-80 object-cover;
+}
+
+.demo-card-actions {
+  @apply absolute top-1/2 left-0 right-0 flex items-center justify-between px-6;
+  transform: translateY(-50%);
+}
+
+.demo-action-btn {
+  @apply flex flex-col items-center gap-1;
+}
+
+.demo-action-btn span:first-child {
+  @apply text-4xl;
+}
+
+.demo-label {
+  @apply text-xs font-bold tracking-wider;
+}
+
+.demo-pass {
+  @apply text-red-400;
+}
+
+.demo-pass .demo-label {
+  @apply text-white;
+}
+
+.demo-like {
+  @apply text-green-400;
+}
+
+.demo-like .demo-label {
+  @apply text-white;
+}
+
+.demo-center-icon {
+  @apply absolute left-1/2 top-1/2;
+  transform: translate(-50%, -50%);
+}
+
+.demo-card-info {
+  @apply absolute bottom-0 left-0 right-0 p-4;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+}
+
+.demo-card-info h3 {
+  @apply text-2xl font-black text-white mb-1;
+}
+
+.demo-card-info p {
+  @apply text-white/80 text-sm;
+}
+
+/* Location Visual (Screen 2) */
+.onboarding-location-visual {
+  @apply flex items-center justify-center;
+}
+
+.location-pulse-container {
+  @apply relative flex items-center justify-center;
+  width: 280px;
+  height: 280px;
+}
+
+.location-pulse-ring {
+  @apply absolute inset-0 rounded-full;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  animation: pulse-location 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.location-pulse-ring.delay-1 {
+  animation-delay: 1.5s;
+}
+
+@keyframes pulse-location {
+  0%,
+  100% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.location-icon-container {
+  @apply relative flex items-center justify-center rounded-full text-white;
+  width: 140px;
+  height: 140px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  border: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+.location-check {
+  @apply absolute -top-2 -right-2 w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-xl;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
+}
+
+/* Share Visual (Screen 3) */
+.onboarding-share-visual {
+  @apply flex items-center justify-center gap-6;
+}
+
+.share-icon-box {
+  @apply w-28 h-28 rounded-3xl flex items-center justify-center text-4xl;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.food-icon {
+  background: linear-gradient(
+    135deg,
+    rgba(251, 146, 60, 0.3),
+    rgba(249, 115, 22, 0.5)
+  );
+}
+
+.whatsapp-icon {
+  @apply bg-green-500 text-white;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+.share-connector {
+  @apply text-white/60;
+}
+
+/* Text Content */
+.onboarding-text {
+  @apply text-center mb-8;
+}
+
+.onboarding-title {
+  @apply text-5xl font-black text-white leading-tight mb-4;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+}
+
+.text-gradient {
+  @apply text-transparent bg-clip-text;
+  background-image: linear-gradient(90deg, #fbbf24, #f97316);
+}
+
+.onboarding-subtitle {
+  @apply text-lg text-white/90 font-medium leading-relaxed px-4;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Action Button */
+.onboarding-button {
+  @apply w-full py-4 px-6 rounded-2xl font-bold text-lg flex items-center justify-center transition-all mb-4;
+  background: rgba(255, 255, 255, 0.95);
+  color: #6366f1;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.onboarding-button:hover {
+  background: white;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 50px rgba(0, 0, 0, 0.3);
+}
+
+.onboarding-button:active {
+  transform: translateY(0);
+}
+
+.onboarding-button.granted {
+  @apply bg-green-500 text-white;
+}
+
+.onboarding-button:disabled {
+  @apply opacity-70 cursor-not-allowed;
+}
+
+/* Skip Text */
+.onboarding-skip-text {
+  @apply text-white/70 font-semibold text-sm mb-8 transition-colors;
+}
+
+.onboarding-skip-text:hover {
+  @apply text-white;
+}
+
+/* Pagination Dots */
+.onboarding-pagination {
+  @apply flex items-center justify-center gap-2;
+}
+
+.pagination-dot {
+  @apply w-2 h-2 rounded-full transition-all;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.pagination-dot.active {
+  @apply w-8;
+  background: white;
+}
